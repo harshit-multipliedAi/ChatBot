@@ -16,12 +16,12 @@ async function askQuestion(req: any){
         try{
             
             const response = await getopenairesponse(inputMessage);
-            console.log(response)
-            inputMessage.push({"role":"assistant","response ":response});
+            // console.log(response)
+            // inputMessage.push({"role":"assistant","content ":response});
             // message.push({role: "assistant", content: response});
             // console.log("Response:", response);
-            console.log("input message: ", JSON.stringify(inputMessage,null,2));
-            return inputMessage;
+            // console.log("input message: ", JSON.stringify(inputMessage,null,2));
+            return response;
         }
         catch(error){
             console.error("Error:", error);
