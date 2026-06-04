@@ -18,7 +18,7 @@ app.get('/', (req,res)=>{
 
 app.post('/ask', async (req,res)=>{
     const result = await userInterface(req.body.data);
-    return res.status(200).json({ message: "Request processed successfully.", data: result });
+    return res.status(200).json({ message: "Request processed successfully.", aiResponse: result });
 })
 
 app.listen(PORT, ()=>{
