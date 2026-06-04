@@ -4,6 +4,7 @@ import "./box.css";
 
 function Box(){
     const [text, setText] = useState("");
+    const backend_url = import.meta.env.VITE_BACKEND_API_URL;
     type Message = {
         role: "user"|"assistant"|"system",
         content: string
@@ -42,7 +43,7 @@ function Box(){
         setMessages(updatedMessage);
         setText("");
         try{
-            const response = await axios.post("http://localhost:4000/ask",{data:updatedMessage});
+            const response = await axios.post(`${backend_url}/ask`,{data:updatedMessage});
             const aiMessage: Message = {
                 role: "assistant",
                 content: response?.data?.aiResponse || ""
