@@ -24,7 +24,7 @@ export async function askChatbot(
     const history = await Message.find({conversationId:currentConversationId}).sort({ createdAt: -1 }).limit(20);
 
     // console.log(history)
-    const promptMessage = [
+    const promptMessage: any = [
         {
             type: "system",
             content: systemPrompt
