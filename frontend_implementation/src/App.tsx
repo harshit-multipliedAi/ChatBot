@@ -1,9 +1,12 @@
-import Box from "./Interface/box.tsx";
+import LandingPage from "./Interface/LandingPage";
+
+// import Box from "./Interface/box.tsx";
 function App() {
   return (
     <div>
       {/* this is comment */}
-      <Box />
+      {/* <Box /> */}
+      <LandingPage/>
     </div>
   );
 }

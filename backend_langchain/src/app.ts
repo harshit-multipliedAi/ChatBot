@@ -1,0 +1,8 @@
+import express from "express";
+import cors from "cors";
+import chatRoutes from "./routes/chat.ts";
+const app = express();
+app.use(cors());
+app.use(express.json());
+app.use("/chat",chatRoutes);
+export default app;
