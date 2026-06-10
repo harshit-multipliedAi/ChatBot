@@ -8,13 +8,13 @@ export async function askChatbot(
     message: string
 ) {
     let currentConversationId = conversationId;
-    console.log("Conversation id before if: ", currentConversationId);
+    // console.log("Conversation id before if: ", currentConversationId);
     if(!currentConversationId){
         const conversation = await Conversation.create({});
         currentConversationId = conversation._id.toString();
     }
 
-    console.log("Conversation id after if: ", currentConversationId);
+    // console.log("Conversation id after if: ", currentConversationId);
 
     await Message.create({
         conversationId: currentConversationId,
