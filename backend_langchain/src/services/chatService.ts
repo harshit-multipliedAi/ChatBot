@@ -2,6 +2,7 @@ import Conversation from "../db/Conversation.model.ts"
 import Message from "../db/Message.model.ts"
 import {agent} from "../langchain/agent.ts"
 import { systemPrompt } from "../prompts/systemPrompt.ts";
+import { retrieveRelevantDocs } from "../rags/retriever.ts";
 
 export async function askChatbot(
     conversationId: string|null,
@@ -21,13 +22,31 @@ export async function askChatbot(
         role: "user",
         content: message
     })
-    const history = await Message.find({conversationId:currentConversationId}).sort({ createdAt: -1 }).limit(20);
+    const history = (await Message.find({conversationId:currentConversationId}).sort({ createdAt: -1 }).limit(20));
+    const retrievedDocs = await retrieveRelevantDocs(message);
+    const ragContext = retrievedDocs.map((doc,index)=> `Document ${index+1}: \n${doc.pageContent}`).join("\n\n");
 
     // console.log(history)
     const promptMessage: any = [
         {
             type: "system",
-            content: systemPrompt
+            content: `
+            ${systemPrompt}
+
+            -----------------------------------------
+
+            Relevant Company Documentation:
+
+            ${ragContext}
+
+            -----------------------------------------
+
+            Instructions:
+
+            - Use the company documentation above whenever it is relevant.
+            - If the answer is not present in the documentation, answer normally only if it is general knowledge.
+            - Never invent company-specific information.
+            `,
         },
             ...history.filter((msg)=>(msg.role === "user"|| msg.role === "assistant") && msg.content !=null)
             .map((msg)=>({
