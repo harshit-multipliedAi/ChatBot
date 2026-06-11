@@ -1,6 +1,247 @@
+// import { Rnd } from "react-rnd";
+// import { useEffect, useRef, useState } from "react";
+// import "./LandingPage.css";
+// import axios from "axios";
+
+// type Message = {
+//   role: "user" | "assistant" | "system";
+//   content: string;
+// };
+
+// export default function LandingPage() {
+//   const [open, setOpen] = useState(false);
+//   const FAB_SIZE = 64;
+
+//   const [chatState, setChatState] = useState({
+//     x: window.innerWidth - FAB_SIZE - 20,
+//     y: window.innerHeight - FAB_SIZE - 20,
+//     width: 360,
+//     height: 520,
+//   });
+//   const backend_url = import.meta.env.VITE_BACKEND_API_URL_2;
+
+//   const [text, setText] = useState("");
+
+//   // Backend conversation id
+//   const [conversationId, setConversationId] =
+//     useState<string | null>(null);
+
+//   const [messages, setMessages] = useState<Message[]>([]);
+
+//   const handleClick = async () => {
+//     if (!text.trim()) return;
+
+//     const currentText = text;
+
+//     // Immediately show user message
+//     setMessages((prev) => [
+//       ...prev,
+//       {
+//         role: "user",
+//         content: currentText,
+//       },
+//     ]);
+
+//     setText("");
+
+//     try {
+//       const response = await axios.post(
+//         `${backend_url}/chat`,
+//         {
+//           conversationId,
+//           message: currentText,
+//         }
+//       );
+//       console.log(response)
+
+//       // Save conversation id after first request
+//       if (
+//         !conversationId &&
+//         response.data.reply.conversationId
+//       ) {
+//         setConversationId(
+//           response.data.reply.conversationId
+//         );
+//       }
+
+//       setMessages((prev) => [
+//         ...prev,
+//         {
+//           role: "assistant",
+//           content:
+//             response.data.reply.reply ??
+//             "No response received.",
+//         },
+//       ]);
+//     } catch (err) {
+//       console.error(err);
+
+//       setMessages((prev) => [
+//         ...prev,
+//         {
+//           role: "assistant",
+//           content:
+//             "Sorry, something went wrong.",
+//         },
+//       ]);
+//     }
+//   };
+
+//   const bottomRef = useRef<HTMLDivElement>(null);
+
+//   useEffect(() => {
+//     bottomRef.current?.scrollIntoView({
+//       behavior: "smooth",
+//     });
+//   }, [messages]);
+
+//   return (
+//     <div className="page">
+//       <header className="nav">
+//         <div className="logo">MULTIPLIED</div>
+
+//         <nav>
+//           <a>Humantic OS</a>
+//           <a>Solutions</a>
+//           <a>Company</a>
+
+//           <button>Book a demo</button>
+//         </nav>
+//       </header>
+
+//       <main className="hero">
+//         <h1>
+//           The operating
+//           <br />
+//           system for frontline
+//           <br />
+//           <em>human intelligence.</em>
+//         </h1>
+
+//         <p>
+//           We connect AI to the point of decision,
+//           turning frontline knowledge into
+//           enterprise intelligence.
+//         </p>
+//       </main>
+//       <Rnd
+//         size={{
+//           width: open ? chatState.width : 64,
+//           height: open ? chatState.height : 64,
+//         }}
+//         position={{
+//           x: chatState.x,
+//           y: chatState.y,
+//         }}
+//         bounds="window"
+//         minWidth={320}
+//         minHeight={open ? 400 : 64}
+//         maxWidth={700}
+//         maxHeight={800}
+//         dragHandleClassName="chatHeader"
+//         enableResizing={
+//           open
+//             ? {
+//                 top: true,
+//                 right: true,
+//                 bottom: true,
+//                 left: true,
+//                 topRight: true,
+//                 bottomRight: true,
+//                 bottomLeft: true,
+//                 topLeft: true,
+//               }
+//             : false
+//         }
+//         onDragStop={(_, d) => {
+//           setChatState((prev) => ({
+//             ...prev,
+//             x: d.x,
+//             y: d.y,
+//           }));
+//         }}
+//         onResizeStop={(_, _dir, ref, _delta, position) => {
+//           setChatState({
+//             x: position.x,
+//             y: position.y,
+//             width: ref.offsetWidth,
+//             height: ref.offsetHeight,
+//           });
+//         }}
+//         style={{
+//           zIndex: 9999
+//         }}
+//       >
+//         {!open ? (
+//           <button
+//             className="fab"
+//             onClick={() => setOpen(true)}
+//           >
+//             💬
+//           </button>
+//         ) : (
+//           <div className="chatbox">
+//             <div className="chatHeader">
+//               Company Chatbot
+
+//               <button
+//                 className="closeBtn"
+//                 onClick={() => setOpen(false)}
+//               >
+//                 ✕
+//               </button>
+//             </div>
+
+//             <div className="chatBody">
+//               {messages.map((m, i) => {
+//                 if (m.role === "system") return null;
+
+//                 return (
+//                   <div
+//                     key={i}
+//                     className={
+//                       m.role === "user"
+//                         ? "user"
+//                         : "bot"
+//                     }
+//                   >
+//                     {m.content}
+//                   </div>
+//                 );
+//               })}
+
+//               <div ref={bottomRef} />
+//             </div>
+
+//             <div className="chatInput">
+//               <input
+//                 value={text}
+//                 placeholder="Ask about the company..."
+//                 onChange={(e) =>
+//                   setText(e.target.value)
+//                 }
+//                 onKeyDown={(e) => {
+//                   if (e.key === "Enter") {
+//                     handleClick();
+//                   }
+//                 }}
+//               />
+
+//               <button onClick={handleClick}>
+//                 Send
+//               </button>
+//             </div>
+//           </div>
+//         )}
+//       </Rnd>
+//     </div>
+//   );
+// }
+
+import { Rnd } from "react-rnd";
 import { useEffect, useRef, useState } from "react";
-import "./LandingPage.css";
 import axios from "axios";
+import "./LandingPage.css";
 
 type Message = {
   role: "user" | "assistant" | "system";
@@ -8,94 +249,31 @@ type Message = {
 };
 
 export default function LandingPage() {
-  const [open, setOpen] = useState(false);
-  const [position, setPosition] = useState({
-    x: window.innerWidth - 100,
-    y: window.innerHeight - 100,
-  });
-    const CHAT_WIDTH = 360;
-    const CHAT_HEIGHT = 520;
-
-    const showLeft =
-      position.x + 64 + CHAT_WIDTH > window.innerWidth;
-
-    const showTop =
-      position.y + 64 + CHAT_HEIGHT > window.innerHeight;
-
-    const dragRef = useRef<{
-      isDragging: boolean;
-      hasDragged: boolean;
-      offsetX: number;
-      offsetY: number;
-    }>({
-      isDragging: false,
-      hasDragged: false,
-      offsetX: 0,
-      offsetY: 0,
-    });
-
-    const handlePointerDown = (e: React.PointerEvent) => {
-      dragRef.current.isDragging = true;
-      dragRef.current.hasDragged = false;
-
-      dragRef.current.offsetX = e.clientX - position.x;
-      dragRef.current.offsetY = e.clientY - position.y;
-
-      window.addEventListener("pointermove", handlePointerMove);
-      window.addEventListener("pointerup", handlePointerUp);
-    };
-
-    const BUTTON_SIZE = 64;
-
-    const handlePointerMove = (e: PointerEvent) => {
-      if (!dragRef.current.isDragging) return;
-
-      let x = e.clientX - dragRef.current.offsetX;
-      let y = e.clientY - dragRef.current.offsetY;
-
-      if(
-        Math.abs(x-position.x)>5||
-        Math.abs(y-position.y)>5
-      ){
-        dragRef.current.hasDragged = true;
-      }
-
-
-      x = Math.max(
-        0,
-        Math.min(x, window.innerWidth - BUTTON_SIZE)
-      );
-
-      y = Math.max(
-        0,
-        Math.min(y, window.innerHeight - BUTTON_SIZE)
-      );
-
-      setPosition({ x, y });
-    };
-
-    const handlePointerUp = () => {
-      dragRef.current.isDragging = false;
-
-      window.removeEventListener("pointermove", handlePointerMove);
-      window.removeEventListener("pointerup", handlePointerUp);
-    };
   const backend_url = import.meta.env.VITE_BACKEND_API_URL_2;
+
+  const [open, setOpen] = useState(false);
+
+  const [chatState, setChatState] = useState({
+    x: window.innerWidth - 420,
+    y: window.innerHeight - 620,
+    width: 380,
+    height: 560,
+  });
 
   const [text, setText] = useState("");
 
-  // Backend conversation id
-  const [conversationId, setConversationId] =
-    useState<string | null>(null);
+  const [conversationId, setConversationId] = useState<string | null>(null);
 
   const [messages, setMessages] = useState<Message[]>([]);
+  const [loading, setLoading] = useState(false);
+  const bottomRef = useRef<HTMLDivElement>(null);
 
   const handleClick = async () => {
-    if (!text.trim()) return;
+    if (!text.trim() || loading) return;
 
-    const currentText = text;
+    const currentText = text.trim();
 
-    // Immediately show user message
+    // Show user's message immediately
     setMessages((prev) => [
       ...prev,
       {
@@ -105,52 +283,42 @@ export default function LandingPage() {
     ]);
 
     setText("");
+    setLoading(true);
 
     try {
-      const response = await axios.post(
-        `${backend_url}/chat`,
-        {
-          conversationId,
-          message: currentText,
-        }
-      );
-      console.log(response)
+      const response = await axios.post(`${backend_url}/chat`, {
+        conversationId,
+        message: currentText,
+      });
 
-      // Save conversation id after first request
-      if (
-        !conversationId &&
-        response.data.reply.conversationId
-      ) {
-        setConversationId(
-          response.data.reply.conversationId
-        );
+      console.log(response);
+
+      // Save conversation id only once
+      if (!conversationId && response.data.reply?.conversationId) {
+        setConversationId(response.data.reply.conversationId);
       }
 
       setMessages((prev) => [
         ...prev,
         {
           role: "assistant",
-          content:
-            response.data.reply.reply ??
-            "No response received.",
+          content: response.data.reply?.reply ?? "No response received.",
         },
       ]);
-    } catch (err) {
-      console.error(err);
+    } catch (error) {
+      console.error(error);
 
       setMessages((prev) => [
         ...prev,
         {
           role: "assistant",
-          content:
-            "Sorry, something went wrong.",
+          content: "Sorry, something went wrong.",
         },
       ]);
+    } finally {
+      setLoading(false);
     }
   };
-
-  const bottomRef = useRef<HTMLDivElement>(null);
-  
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({
@@ -168,7 +336,7 @@ export default function LandingPage() {
           <a>Solutions</a>
           <a>Company</a>
 
-          <button>Book a demo</button>
+          <button>Book Demo</button>
         </nav>
       </header>
 
@@ -182,135 +350,98 @@ export default function LandingPage() {
         </h1>
 
         <p>
-          We connect AI to the point of decision,
-          turning frontline knowledge into
-          enterprise intelligence.
+          We connect AI to the point of decision, turning frontline knowledge
+          into enterprise intelligence.
         </p>
       </main>
-      <div
-          className="chatWrapper"
-          style={{
-            left: position.x,
-            top: position.y,
-          }}
-        >
-          {/* {!open && ( */}
-            <button
-              className="fab"
-              onPointerDown={handlePointerDown}
-              onClick={() => {
-                if(dragRef.current.hasDragged)return;
-                setOpen(!open)
-              }}
-            >
-              💬
-            </button>
-          {/* )} */}
 
-          {open && (
-            <div className="chatbox" 
-              style={{
-                left: showLeft? -CHAT_WIDTH -12 :76,
-                top: showTop? -CHAT_HEIGHT + 64 :0
-              }}
-            >
-              <div
-                className="chatHeader"
-                onPointerDown={handlePointerDown}
-              >
-                Company Chatbot
-              </div>
+      {/* Floating FAB */}
 
-              <div className="chatBody">
-                {messages.map((m, i) => {
-                  if (m.role === "system") return null;
+      <button className="fab" onClick={() => setOpen((prev) => !prev)}>
+        💬
+      </button>
 
-                  return (
-                    <div
-                      key={i}
-                      className={m.role === "user" ? "user" : "bot"}
-                    >
-                      {m.content}
-                    </div>
-                  );
-                })}
-
-                <div ref={bottomRef} />
-              </div>
-
-              <div className="chatInput">
-                <input
-                  value={text}
-                  placeholder="Ask about the company..."
-                  onChange={(e) => setText(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      handleClick();
-                    }
-                  }}
-                />
-
-                <button onClick={handleClick}>Send</button>
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* <button
-          className="fab"
-          onClick={() => setOpen(!open)}
-          >
-          💬
-        </button>
+      {/* Chat Window */}
 
       {open && (
-        <div className="chatbox">
-          <div className="chatHeader">
-            Company Chatbot
-          </div>
+        <Rnd
+          bounds="window"
+          dragHandleClassName="chatHeader"
+          size={{
+            width: chatState.width,
+            height: chatState.height,
+          }}
+          position={{
+            x: chatState.x,
+            y: chatState.y,
+          }}
+          minWidth={320}
+          minHeight={450}
+          maxWidth={700}
+          maxHeight={900}
+          onDragStop={(_, d) => {
+            setChatState((prev) => ({
+              ...prev,
+              x: d.x,
+              y: d.y,
+            }));
+          }}
+          onResizeStop={(_, __, ref, ___, position) => {
+            setChatState({
+              x: position.x,
 
-          <div className="chatBody">
-            {messages.map((m, i) => {
-              if (m.role === "system")
-                return null;
+              y: position.y,
 
-              return (
-                <div
-                  key={i}
-                  className={
-                    m.role === "user"
-                      ? "user"
-                      : "bot"
+              width: ref.offsetWidth,
+
+              height: ref.offsetHeight,
+            });
+          }}
+        >
+          <div className="chatbox">
+            <div className="chatHeader">
+              <span>Company Assistant</span>
+
+              <button className="closeBtn" onClick={() => setOpen(false)}>
+                ✕
+              </button>
+            </div>
+
+            <div className="chatBody">
+              {messages.map((m, i) => {
+                if (m.role === "system") return null;
+
+                return (
+                  <div key={i} className={m.role === "user" ? "user" : "bot"}>
+                    {m.content}
+                  </div>
+                );
+              })}
+              {loading && <div className="bot typing">Thinking...</div>}
+
+              <div ref={bottomRef} />
+            </div>
+
+            <div className="chatInput">
+              <input
+                disabled={loading}
+                value={text}
+                placeholder="Ask about the company..."
+                onChange={(e) => setText(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleClick();
                   }
-                >
-                  {m.content}
-                </div>
-              );
-            })}
+                }}
+              />
 
-            <div ref={bottomRef} />
+              <button onClick={handleClick} disabled={loading}>
+                {loading ? "..." : "Send"}
+              </button>
+            </div>
           </div>
-
-          <div className="chatInput">
-            <input
-              value={text}
-              placeholder="Ask about the company..."
-              onChange={(e) =>
-                setText(e.target.value)
-              }
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  handleClick();
-                }
-              }}
-            />
-
-            <button onClick={handleClick}>
-              Send
-            </button>
-          </div>
-        </div>
-      )} */}
+        </Rnd>
+      )}
     </div>
   );
 }
