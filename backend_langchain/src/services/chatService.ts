@@ -23,29 +23,36 @@ export async function askChatbot(
         content: message
     })
     const history = (await Message.find({conversationId:currentConversationId}).sort({ createdAt: -1 }).limit(20));
-    const retrievedDocs = await retrieveRelevantDocs(message);
-    const ragContext = retrievedDocs.map((doc,index)=> `Document ${index+1}: \n${doc.pageContent}`).join("\n\n");
+    // const retrievedDocs = await retrieveRelevantDocs(message);
+    // const ragContext = retrievedDocs.map((doc,index)=> `Document ${index+1}: \n${doc.pageContent}`).join("\n\n");
+    // console.log("rag Context: ", ragContext);
+    // -----------------------------------------
 
+    // Relevant Company Documentation:
+
+    // ${ragContext}
+
+    // -----------------------------------------
     // console.log(history)
     const promptMessage: any = [
         {
             type: "system",
             content: `
-            ${systemPrompt}
+                ${systemPrompt}
 
-            -----------------------------------------
+                You have access to company documentation through tools.
 
-            Relevant Company Documentation:
+                If the user asks about Multiplied AI,
+                its products,
+                services,
+                pricing,
+                careers,
+                policies,
+                or internal documentation,
 
-            ${ragContext}
+                use the company_docs tool.
 
-            -----------------------------------------
-
-            Instructions:
-
-            - Use the company documentation above whenever it is relevant.
-            - If the answer is not present in the documentation, answer normally only if it is general knowledge.
-            - Never invent company-specific information.
+                Do not fabricate company information.
             `,
         },
             ...history.filter((msg)=>(msg.role === "user"|| msg.role === "assistant") && msg.content !=null)

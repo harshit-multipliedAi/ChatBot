@@ -25,6 +25,7 @@
     "langchain": "^1.4.4",
     "mongoose": "^9.6.3",
     "pdf-parse": "^2.4.5",
+    "playwright": "^1.60.0",
     "zod": "^4.4.3"
   },
   "devDependencies": {
