@@ -3,7 +3,7 @@ import { retrieveRelevantDocs } from "./retriever.ts";
 
 async function test() {
     const docs = await retrieveRelevantDocs(
-        "what are current job role to apply in this company?"
+        "Tell me about job opening in this company."
     );
     console.log(
         docs.map((doc)=>({
